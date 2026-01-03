@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  # Serveri për Auth
+  db-auth:
+    image: mysql:8.0
+    container_name: auth_db_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: auth_service_db
+    volumes:
+      - ./databases/auth_service_db.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3307:3306"
+
+  # Serveri për Superstore Data
+  db-superstore:
+    image: mysql:8.0
+    container_name: superstore_db_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: superstore_db
+    volumes:
+      - ./databases/superstore_db.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3308:3306"
