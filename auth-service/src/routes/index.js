@@ -12,4 +12,13 @@ router.post('/register-staff', isAdmin, authController.register);
 // Kjo rrugë na duhet vetëm një herë për të krijuar Adminin e parë (mund ta fshish më vonë)
 router.post('/setup-admin', authController.register);
 
+//GET ALL STAFF
+router.get('/users', isAdmin, authController.getAllStaff);
+
+// UPDATE STAFF
+router.put('/users/:id', isAdmin, authController.updateStaff);
+
+// DELETE STAFF
+router.delete('/users/:id', isAdmin, authController.deleteStaff);
+
 module.exports = router;

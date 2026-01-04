@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ManageStaff from "../components/admin/ManageStaff";
+import logo from "../../images/logo.svg";
+
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
@@ -41,12 +44,16 @@ const AdminDashboard = () => {
         <div className="flex h-screen bg-[#f8f9fc] font-sans text-gray-700">
             
             {/* SIDEBAR - Premium Dark Blue */}
-            <aside className="w-72 bg-[#4e73df] bg-gradient-to-b from-[#4e73df] to-[#224abe] text-white flex flex-col shadow-xl">
+             <aside className="w-72 bg-[#b91c1c] bg-gradient-to-b from-[#b91c1c] to-[#7f1d1d] text-white flex flex-col shadow-xl">
                 <div className="p-8 text-xl font-black tracking-widest flex items-center gap-3 italic">
                     <div className="bg-white p-1 rounded-rotate-12">
-                        <span className="text-[#4e73df] text-2xl">⚡</span>
+                        <img
+                            src={logo}
+                            alt="Sales Metrics logo"
+                            className="h-9 w-9"
+                            />
                     </div>
-                    SUPERSTORE
+                    SalesMetrics
                 </div>
 
                 <nav className="flex-1 px-4 mt-4">
@@ -64,6 +71,17 @@ const AdminDashboard = () => {
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ${activeTab === 'register' ? 'bg-white/20 shadow-inner font-bold' : 'hover:bg-white/10'}`}
                     >
                         <span>👤</span> Register Staff
+                    </button>
+
+                    <button
+                        onClick={() => setActiveTab('manage-staff')}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300
+                        ${activeTab === 'manage-staff'
+                            ? 'bg-white/20 shadow-inner font-bold'
+                            : 'hover:bg-white/10'}`}
+                        >
+                        <span className="text-lg">👥</span>
+                        <span>Manage Staff</span>
                     </button>
 
                     <div className="my-6 border-t border-white/10"></div>
@@ -94,8 +112,12 @@ const AdminDashboard = () => {
                         </div>
                         <div className="h-10 w-[1px] bg-gray-200 mx-2"></div>
                         <div className="flex items-center gap-3 cursor-pointer group">
-                            <span className="text-sm font-medium group-hover:text-blue-600 transition">{role} Manager</span>
-                            <img src="https://ui-avatars.com/api/?name=Admin&background=4e73df&color=fff" className="w-10 h-10 rounded-full border-2 border-transparent group-hover:border-blue-400 transition" alt="user" />
+                              <span className="text-sm font-medium group-hover:text-red-700 transition">{role} Manager</span>
+                            <img
+                                src="https://ui-avatars.com/api/?name=Admin&background=b91c1c&color=fff"
+                                className="w-10 h-10 rounded-full border-2 border-transparent group-hover:border-red-400 transition"
+                                alt="user"
+                                />
                         </div>
                     </div>
                 </header>
@@ -127,12 +149,12 @@ const AdminDashboard = () => {
 
                             <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 min-h-[500px] relative overflow-hidden">
                                 <div className="flex justify-between items-center mb-8">
-                                    <h3 className="text-lg font-bold text-[#4e73df]">Real-time Sales Overview</h3>
-                                    <button className="bg-[#4e73df] text-white px-6 py-2 rounded-full text-xs font-bold hover:bg-blue-700 shadow-lg shadow-blue-200 transition">Download PDF</button>
+                                    <h3 className="text-lg font-bold text-[#b91c1c]">Real-time Sales Overview</h3>
+                                    <button className="bg-[#b91c1c] text-white px-6 py-2 rounded-full text-xs font-bold hover:bg-red-700 shadow-lg shadow-red-200 transition">Download PDF</button>
                                 </div>
                                 {/* Power BI Embed Area */}
-                                <div className="w-full h-[450px] bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center group cursor-pointer hover:border-blue-300 transition-all">
-                                    <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">💹</div>
+                                <div className="w-full h-[450px] bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center group cursor-pointer hover:border-red-300 transition-all">
+                                    <div className="w-16 h-16 bg-blue-50 text-red-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">💹</div>
                                     <p className="text-gray-400 font-medium">Power BI Report is ready to be embedded</p>
                                     <p className="text-[10px] text-gray-300 mt-2 uppercase tracking-widest">Awaiting API Token</p>
                                 </div>
@@ -142,50 +164,115 @@ const AdminDashboard = () => {
 
                     {/* PJESA E REGJISTRIMIT */}
                     {activeTab === 'register' && (
-                        <div className="max-w-2xl mx-auto animate-fadeIn">
-                            <div className="bg-white p-10 rounded-3xl shadow-xl border border-gray-100">
-                                <div className="text-center mb-10">
-                                    <h3 className="text-2xl font-black text-gray-800">Add New Team Member</h3>
-                                    <p className="text-gray-400 text-sm mt-2">Fill the credentials to create a new staff account</p>
+                <div className="max-w-xl mx-auto animate-fadeIn">
+                    <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                        <div className="text-center mb-6">
+                            <h3 className="text-xl font-black text-gray-800">
+                                Add New Team Member
+                            </h3>
+                            <p className="text-gray-400 text-xs mt-1">
+                                Fill the credentials to create a new staff account
+                            </p>
+                        </div>
+
+                        <form onSubmit={handleRegisterStaff} className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">
+                                        First Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="w-full p-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-red-400 transition text-sm"
+                                        placeholder="John"
+                                        value={firstName}
+                                        onChange={(e) => setFirstName(e.target.value)}
+                                        required
+                                    />
                                 </div>
-                                
-                                <form onSubmit={handleRegisterStaff} className="space-y-6">
-                                    <div className="grid grid-cols-2 gap-6">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-gray-500 uppercase ml-1">First Name</label>
-                                            <input type="text" className="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-400 transition" placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-gray-500 uppercase ml-1">Last Name</label>
-                                            <input type="text" className="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-400 transition" placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
-                                        </div>
-                                    </div>
 
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold text-gray-500 uppercase ml-1">Birthdate</label>
-                                        <input type="date" className="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-400 transition" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} required />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold text-gray-500 uppercase ml-1">Official Email</label>
-                                        <input type="email" className="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-400 transition" placeholder="staff@superstore.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold text-gray-500 uppercase ml-1">Secure Password</label>
-                                        <input type="password" className="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-400 transition" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                                    </div>
-
-                                    <button className="w-full bg-[#4e73df] hover:bg-blue-700 text-white py-4 rounded-2xl font-black shadow-lg shadow-blue-100 transition-all hover:-translate-y-1 active:translate-y-0">
-                                        CREATE ACCOUNT
-                                    </button>
-                                </form>
-                                {message && (
-                                    <div className={`mt-6 p-4 rounded-2xl text-center text-sm font-bold animate-bounce ${message.includes('✅') ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
-                                        {message}
-                                    </div>
-                                )}
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">
+                                        Last Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="w-full p-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-red-400 transition text-sm"
+                                        placeholder="Doe"
+                                        value={lastName}
+                                        onChange={(e) => setLastName(e.target.value)}
+                                        required
+                                    />
+                                </div>
                             </div>
+
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">
+                                    Birthdate
+                                </label>
+                                <input
+                                    type="date"
+                                    className="w-full p-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:red-blue-400 transition text-sm"
+                                    value={birthdate}
+                                    onChange={(e) => setBirthdate(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">
+                                    Official Email
+                                </label>
+                                <input
+                                    type="email"
+                                    className="w-full p-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-red-400 transition text-sm"
+                                    placeholder="staff@superstore.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-bold text-gray-500 uppercase ml-1">
+                                    Secure Password
+                                </label>
+                                <input
+                                    type="password"
+                                    className="w-full p-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-red-400 transition text-sm"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            <button className="w-full bg-[#b91c1c] hover:bg-red-700 text-white py-3 rounded-xl font-black shadow-md shadow-blue-100 transition-all hover:-translate-y-0.5 active:translate-y-0 text-sm">
+                                CREATE ACCOUNT
+                            </button>
+                        </form>
+
+                        {message && (
+                            <div
+                                className={`mt-4 p-3 rounded-xl text-center text-xs font-bold animate-bounce ${
+                                    message.includes('✅')
+                                        ? 'bg-green-50 text-green-600'
+                                        : 'bg-red-50 text-red-600'
+                                }`}
+                            >
+                                {message}
+                            </div>
+                        )}
+        </div>
+    </div>
+)}
+
+                    
+
+                     {/* PJESA MANAGE STAFF */}
+                    {activeTab === 'manage-staff' && (
+                        <div className="animate-fadeIn">
+                            <ManageStaff />
                         </div>
                     )}
                 </main>

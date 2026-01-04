@@ -72,3 +72,64 @@ exports.register = async (req, res) => {
         res.status(500).json({ error: "Gabim gjatë regjistrimit në server" });
     }
 };
+
+
+        /**
+     * GET ALL STAFF
+     */
+    exports.getAllStaff = async (req, res) => {
+    try {
+        const [rows] = await db.query(
+        "SELECT id, first_name, last_name, email, birthdate, role FROM users WHERE role='STAFF'"
+        );
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ message: "Gabim gjatë marrjes së stafit" });
+    }
+    };
+
+    /**
+     * UPDATE STAFF
+     */
+    exports.updateStaff = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { first_name, last_name, birthdate } = req.body;
+
+        // FIX: formati për DATE (pa timezone)
+        const formattedBirthdate = birthdate
+        ? birthdate.substring(0, 10)
+        : null;
+
+        console.log('UPDATE STAFF:', id, req.body);
+
+        await db.query(
+        `UPDATE users
+        SET first_name = ?, last_name = ?, birthdate = ?
+        WHERE id = ? AND role = 'STAFF'`,
+        [first_name, last_name, formattedBirthdate, id]
+        );
+
+        res.json({ message: 'Staff updated successfully' });
+    } catch (error) {
+        console.error('UPDATE ERROR:', error);
+        res.status(500).json({ message: 'Update staff failed' });
+    }
+    };
+
+    /**
+     * DELETE STAFF
+     */
+    exports.deleteStaff = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await db.query(
+        "DELETE FROM users WHERE id=? AND role='STAFF'",
+        [id]
+        );
+        res.json({ message: "Stafi u fshi me sukses" });
+    } catch (err) {
+        res.status(500).json({ message: "Gabim gjatë fshirjes" });
+    }
+};

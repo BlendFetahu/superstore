@@ -7,7 +7,7 @@ const app = express();
 // 2. Kjo duhet të jetë PARA app.use('/api/auth', routes)
 app.use(cors({
     origin: 'http://localhost:5173',
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
