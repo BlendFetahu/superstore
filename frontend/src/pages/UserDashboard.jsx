@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Shtohet për navigim
 
 const UserDashboard = () => {
     const [orders, setOrders] = useState([]);
@@ -8,11 +9,12 @@ const UserDashboard = () => {
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [message, setMessage] = useState(null);
+    const navigate = useNavigate(); // Inicializimi i navigimit
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             fetchOrders();
-        }, 500); // Kërkon 500ms pasi përdoruesi ndalon shkrimin (Debounce)
+        }, 500);
 
         return () => clearTimeout(delayDebounceFn);
     }, [page, searchTerm]);
@@ -20,18 +22,34 @@ const UserDashboard = () => {
     const fetchOrders = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:5001/api/orders/all?page=${page}&limit=20&search=${searchTerm}`);
+            // Shtohet token-i në kërkesë për siguri
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`http://localhost:5001/api/orders/all?page=${page}&limit=20&search=${searchTerm}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             setOrders(response.data.orders);
             setTotalPages(response.data.totalPages);
         } catch (error) {
-            console.error("Gabim:", error);
+            console.error("Gabim gjatë marrjes së porosive:", error);
+            if (error.response?.status === 401) handleLogout(); // Nëse tokeni s'është valid, bëj logout
         }
         setLoading(false);
     };
 
+    // Funksioni për Log Out
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/login');
+    };
+
     const handleShipModeChange = async (orderId, newMode) => {
         try {
-            await axios.put(`http://localhost:5001/api/orders/update/${orderId}`, { ship_mode: newMode });
+            const token = localStorage.getItem('token');
+            await axios.put(`http://localhost:5001/api/orders/update/${orderId}`, 
+                { ship_mode: newMode },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
             setOrders(prev => prev.map(o => o.order_id === orderId ? { ...o, ship_mode: newMode } : o));
             setMessage(`U ruajt: ${orderId}`);
             setTimeout(() => setMessage(null), 3000);
@@ -58,13 +76,26 @@ const UserDashboard = () => {
             )}
 
             <div className="max-w-7xl mx-auto">
-                {/* Header & Search Section */}
+                {/* Header Section me Butonin Log Out */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
-                    <div>
-                        <h1 className="text-4xl font-black text-slate-900 tracking-tight">Superstore Orders</h1>
-                        <p className="text-slate-500 font-medium">Menaxhimi i dataset-it prej 51,000+ porosive</p>
+                    <div className="flex justify-between w-full items-center">
+                        <div>
+                            <h1 className="text-4xl font-black text-slate-900 tracking-tight">Superstore Orders</h1>
+                            <p className="text-slate-500 font-medium">Menaxhimi i dataset-it prej 51,000+ porosive</p>
+                        </div>
+                        
+                        {/* Butoni i Ri Log Out */}
+                        <button 
+                            onClick={handleLogout}
+                            className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-xl font-bold shadow-lg shadow-red-200 transition-all active:scale-95"
+                        >
+                            Log Out 🚪
+                        </button>
                     </div>
+                </div>
 
+                {/* Search Bar Section */}
+                <div className="mb-6 flex justify-end">
                     <div className="relative w-full md:w-96">
                         <input 
                             type="text"
