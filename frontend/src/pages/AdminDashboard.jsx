@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ManageStaff from "../components/admin/ManageStaff";
 import logo from "../../images/logo.svg";
+import PowerBIPage from "../components/admin/PowerBIPage";
+
+
 
 
 const AdminDashboard = () => {
@@ -10,7 +13,7 @@ const AdminDashboard = () => {
     const role = localStorage.getItem('role');
     
     // State për të ndërruar faqet (Tabs)
-    const [activeTab, setActiveTab] = useState('reports');
+    const [activeTab, setActiveTab] = useState('executive');
 
     // State për formën e regjistrimit
     const [firstName, setFirstName] = useState('');
@@ -40,6 +43,7 @@ const AdminDashboard = () => {
         }
     };
 
+
     return (
         <div className="flex h-screen bg-[#f8f9fc] font-sans text-gray-700">
             
@@ -58,13 +62,6 @@ const AdminDashboard = () => {
 
                 <nav className="flex-1 px-4 mt-4">
                     <p className="text-[10px] font-bold text-blue-200 uppercase px-4 mb-2 opacity-60">Interface</p>
-                    
-                    <button 
-                        onClick={() => setActiveTab('reports')}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 mb-2 ${activeTab === 'reports' ? 'bg-white/20 shadow-inner font-bold' : 'hover:bg-white/10'}`}
-                    >
-                        <span>📊</span> Reports & Analytics
-                    </button>
 
                     <button 
                         onClick={() => setActiveTab('register')}
@@ -85,11 +82,47 @@ const AdminDashboard = () => {
                     </button>
 
                     <div className="my-6 border-t border-white/10"></div>
-                    <p className="text-[10px] font-bold text-blue-200 uppercase px-4 mb-2 opacity-60">Addons</p>
                     
-                    <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-all opacity-50 cursor-not-allowed">
-                        <span>📁</span> Tables (Coming Soon)
+                    <p className="text-[10px] font-bold text-blue-200 uppercase px-4 mb-2 opacity-60">
+                        Analytics Pages
+                    </p>
+
+                    <button onClick={() => setActiveTab('executive')}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300
+                    ${activeTab === 'analytics-overview' ? 'bg-white/20 shadow-inner font-bold' : 'hover:bg-white/10'}`}>
+                    📊 Executive Overview
                     </button>
+
+                    <button onClick={() => setActiveTab('customers')}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300
+                    ${activeTab === 'analytics-customers' ? 'bg-white/20 shadow-inner font-bold' : 'hover:bg-white/10'}`}>
+                    🧑‍🤝‍🧑 Customer Analysis
+                    </button>
+
+                    <button onClick={() => setActiveTab('category')}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300
+                    ${activeTab === 'analytics-category' ? 'bg-white/20 shadow-inner font-bold' : 'hover:bg-white/10'}`}>
+                    🏷 Category Performance
+                    </button>
+
+                    <button onClick={() => setActiveTab('products')}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300
+                    ${activeTab === 'analytics-products' ? 'bg-white/20 shadow-inner font-bold' : 'hover:bg-white/10'}`}>
+                    📦 Product Insights
+                    </button>
+
+                    <button onClick={() => setActiveTab('timeseries')}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300
+                    ${activeTab === 'analytics-trends' ? 'bg-white/20 shadow-inner font-bold' : 'hover:bg-white/10'}`}>
+                    📈 Time Series & Trends
+                    </button>
+
+                    <button onClick={() => setActiveTab('regional')}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300
+                    ${activeTab === 'analytics-regions' ? 'bg-white/20 shadow-inner font-bold' : 'hover:bg-white/10'}`}>
+                    🌍 Regional / Location Insights
+                    </button>
+
                 </nav>
 
                 <div className="p-6">
@@ -106,10 +139,6 @@ const AdminDashboard = () => {
                 <header className="bg-white h-20 shadow-sm flex justify-between items-center px-10 z-10">
                     <h2 className="text-xl font-semibold text-gray-800 capitalize">{activeTab.replace('-', ' ')}</h2>
                     <div className="flex items-center gap-6">
-                        <div className="relative">
-                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">3</span>
-                            <span className="text-xl">🔔</span>
-                        </div>
                         <div className="h-10 w-[1px] bg-gray-200 mx-2"></div>
                         <div className="flex items-center gap-3 cursor-pointer group">
                               <span className="text-sm font-medium group-hover:text-red-700 transition">{role} Manager</span>
@@ -275,6 +304,50 @@ const AdminDashboard = () => {
                             <ManageStaff />
                         </div>
                     )}
+                    
+                   
+                    {activeTab === "executive" && (
+                    <PowerBIPage
+                        title="Executive Overview — KPI & Performance"
+                        src="https://app.powerbi.com/reportEmbed?reportId=d86c72d8-da05-45fb-bffa-2074b5f79566&autoAuth=true&ctid=a7f9f46c-13e5-4ad6-97fd-87dcfb8bc2d5&pageName=ReportSection43a56abc92e901eda0b6"
+                    />
+                    )}
+
+                     {activeTab === "customers" && (
+                    <PowerBIPage
+                        title="Customer Analysis — Segment & Profitability"
+                        src="https://app.powerbi.com/reportEmbed?reportId=d86c72d8-da05-45fb-bffa-2074b5f79566&autoAuth=true&ctid=a7f9f46c-13e5-4ad6-97fd-87dcfb8bc2d5&pageName=ReportSection43a56abc92e901eda0b6"
+                    />
+                    )}
+
+                    {activeTab === "category" && (
+                    <PowerBIPage
+                        title="Category Performance — Sales vs Profit"
+                        src = "https://app.powerbi.com/reportEmbed?reportId=d86c72d8-da05-45fb-bffa-2074b5f79566&autoAuth=true&ctid=a7f9f46c-13e5-4ad6-97fd-87dcfb8bc2d5&pageName=ReportSection64c4fc1d3ea2877e097a"   
+                    />
+                    )}
+
+                    {activeTab === "products" && (
+                    <PowerBIPage
+                        title="Product Insights — Top / Bottom Products"
+                        src = "https://app.powerbi.com/reportEmbed?reportId=d86c72d8-da05-45fb-bffa-2074b5f79566&autoAuth=true&ctid=a7f9f46c-13e5-4ad6-97fd-87dcfb8bc2d5&pageName=ReportSection296bfdcf400725a20e84"
+                    />
+                    )}
+
+                    {activeTab === "timeseries" && (
+                    <PowerBIPage
+                        title="Time Series & Trends — YoY & Seasonality"
+                        src= "https://app.powerbi.com/reportEmbed?reportId=d86c72d8-da05-45fb-bffa-2074b5f79566&autoAuth=true&ctid=a7f9f46c-13e5-4ad6-97fd-87dcfb8bc2d5&pageName=ReportSection337e80940e791200de93"
+                    />
+                    )}
+
+                    {activeTab === "regional" && (
+                    <PowerBIPage
+                        title="Regional & Location Insights — Geo Performance"
+                        src="https://app.powerbi.com/reportEmbed?reportId=d86c72d8-da05-45fb-bffa-2074b5f79566&autoAuth=true&ctid=a7f9f46c-13e5-4ad6-97fd-87dcfb8bc2d5&pageName=ReportSectiondbfbd22076eb033ba57c"
+                    />
+                    )}
+
                 </main>
             </div>
         </div>
